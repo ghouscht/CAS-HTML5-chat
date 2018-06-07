@@ -1,0 +1,60 @@
+html {
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+    line-height: 1.15;
+    background-color: lightblue;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    flex-direction: column;
+    display: flex;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    background: lightgrey;
+}
+
+header h1 {
+    margin-left: 2%;
+    color: white;
+}
+
+header nav {
+    margin: 15px 20px 0px 0px;
+    color: white;
+}
+
+header ul {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+}
+
+header li:not(:first-child)::before {
+    content: "|";
+}
+
+header li {
+    float: right;
+    list-style-type: none;
+}
+
+header a {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0px 10px 0px 10px;
+    color: white;
+}
+
+header a:hover {
+    text-decoration: underline;
+}

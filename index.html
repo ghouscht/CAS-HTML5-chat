@@ -2,8 +2,8 @@
 <html lang="de">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat - Login</title>
     <style>
         html {
@@ -75,7 +75,7 @@
 
 <body>
 <div>
-    <form method="GET" action="chat.html">
+    <form method="GET" action="chat.html" id="login">
         <fieldset>
             <div>
                 <p>
@@ -92,13 +92,26 @@
 
 <script>
     let nicknameElem = document.getElementById('nickname');
+    let loginForm = document.getElementById('login');
+    let usernameKey = 'username';
+
+    window.onload = function() {
+        nicknameElem.value = localStorage.getItem(usernameKey)
+    };
+
     nicknameElem.addEventListener('invalid', function (event) {
         if (this.validity.valueMissing) {
             this.setCustomValidity(this.getAttribute('data-errMsg'));
         }
     });
-    nicknameElem.addEventListener('change',function(event){
+    nicknameElem.addEventListener('change', function (event) {
         this.setCustomValidity('');
-    })
+    });
+
+    loginForm.addEventListener('submit', function (event) {
+        localStorage.setItem(usernameKey, nicknameElem.value)
+    });
+
+
 </script>
 </html>

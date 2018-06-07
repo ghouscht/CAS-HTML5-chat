@@ -1,100 +1,53 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="style/main.css"/>
     <style>
-        html {
-            font-family: sans-serif;
-            display: flex;
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            flex-direction: column;
-            display: flex;
-            width: 100%;
-        }
-
-        header {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: stretch;
-            background: lightblue;
-            margin: 0;
-        }
-
-        header h1 {
-            margin-left: 2%;
-            color: white;
-        }
-
-        header nav {
-            flex-basis: 15%;
-            margin-right: 2%;
-        }
-
-        header ul {
-            display: flex;
-            justify-content: space-around;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-
-        header li {
-            display: inline-flex;
-            align-items: center;
-            list-style-type: none;
-        }
-
-        header a {
-            font-weight: bold;
-            color: white;
-        }
-
         main {
             flex: 1;
             display: flex;
-            background-color: lightgrey;
-        }
-
-        main aside {
-            flex-basis: 25%;
-            align-content: flex-end;
+            background-color: whitesmoke;
         }
 
         main article {
-            flex-basis: 75%;
-            align-items: stretch;
-        }
-
-        form {
-            flex-direction: column;
             display: flex;
+            flex-direction: column;
+            flex-basis: 80%; /* use 80% of the screens width */
+            background: aliceblue;
         }
 
         div#chat {
-            background: lightskyblue;
-            height: 90%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main form {
+            display: flex;
+            min-height: 15%;
+        }
+
+        main textarea {
+            display: flex;
+            flex-basis: 100%;
+        }
+
+        main section {
+            margin: 5px 0px 0px 10px; /* margin goes clockwise, top -> right -> bottom -> left */
+            display: flex;
         }
 
         footer {
             display: flex;
             justify-content: center;
-            background: lightblue;
+            background: lightcoral;
         }
     </style>
-
     <title>Chat</title>
 </head>
-
 <body>
-
 <header>
     <h1>Chat</h1>
     <nav>
@@ -108,6 +61,9 @@
             <li>
                 <a href="profile.html">Profile</a>
             </li>
+            <li>
+                <a href="index.html">Logout</a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -116,32 +72,53 @@
     <article>
         <div id="chat">
             <section>
-                Blablabla
+                Blabl
             </section>
             <section>
                 Blabla2
             </section>
+            <section>
+                Test
+            </section>
         </div>
         <form method="GET">
             <textarea name="message" id="message"></textarea>
-            <input type="submit" value="Send">
+            <input type="submit" value="Send"/>
         </form>
     </article>
 
     <aside>
-        <ul>
-            <li>User 1</li>
-            <li>User 2</li>
-            <li>User 3</li>
-            <li>...</li>
+        <h2>Users</h2>
+        <ul id="users">
         </ul>
     </aside>
 </main>
-
 <footer>
     Server is currently offline...
 </footer>
-
 </body>
+<script>
+    // read the users which are registered
+    let userReq = new XMLHttpRequest();
+    userReq.responseType = "json";
+    userReq.open('GET', 'https://chat.humbapa.ch/api/Users');
+    userReq.send();
 
+    userReq.addEventListener('load', function (e) {
+        let users = this.response;
+        let userList = document.getElementById('users');
+
+        // append a list item for each user
+        for (let i = 0; i < users.length; i++) {
+            let newListElem = document.createElement('li');
+
+            newListElem.innerHTML = `${users[i].nickname} (${users[i].status})`;
+            userList.appendChild(newListElem);
+        }
+    });
+
+    userReq.addEventListener('error', function (e) {
+        console.Log('ERROR: ' + e);
+    });
+</script>
 </html>
