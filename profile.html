@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Profile</title>
+    <style>
+        html {
+            font-family: sans-serif;
+            line-height: 1.15;
+            background-color: lightblue;
+        }
+
+        fieldset {
+            margin: 5px;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        legend {
+            font-weight: bold;
+            font-size: 120%;
+        }
+
+        .avatar img {
+            height: 50px;
+        }
+
+        .avatar input {
+            height: 50px;
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        form label {
+            display: block;
+        }
+
+        @media screen and (min-width: 800px) {
+            .avatar li {
+                display: inline;
+            }
+
+            form label {
+                display: inline-block;
+                width: 10em;
+            }
+
+            form input [type="text"] {
+                margin-left: 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <form method="GET">
+        <fieldset>
+            <legend>Personal details</legend>
+            <div>
+                <label for="firstname">First name</label>
+                <input type="text" id="firstname" name="firstname"/>
+            </div>
+            <div>
+                <label for="lastname">Last name</label>
+                <input type="text" id="lastname" name="lastname"/>
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required="true"/>
+            </div>
+            <div>
+                <label for="zipcode">ZIP Code</label>
+                <input type="number" id="zipcode" name="zipcode"/>
+            </div>
+            <div>
+                <label for="city">City</label>
+                <input type="text" id="city" name="city"/>
+            </div>
+            <div>
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" required="true"/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Profile</legend>
+            <div>
+                <label for="nickname">Nickname</label>
+                <input type="text" id="nickname" name="nickname"/>
+            </div>
+            <div>
+                <label for="profilepicture1">Picture</label>
+                <ul class="avatar">
+                    <li>
+                        <input type="radio" id="profilepicture1" name="profilepicture" value="1" required="true"/>
+                        <picture>
+                            <source srcset="images/avatar_icon_1.svg">
+                            <img src="images/avatar_icon_1.svg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="profilepicture2" name="profilepicture" value="2">
+                        <picture>
+                            <source srcset="images/avatar_icon_2.svg">
+                            <img src="images/avatar_icon_2.svg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="profilepicture3" name="profilepicture" value="3">
+                        <picture>
+                            <source srcset="images/avatar_icon_3.svg">
+                            <img src="images/avatar_icon_3.svg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="profilepicture4" name="profilepicture" value="4">
+                        <picture>
+                            <source srcset="images/avatar_icon_4.svg">
+                            <img src="images/avatar_icon_4.svg">
+                        </picture>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <label for="profiledescription">Description</label>
+                <input type="text" id="profiledescription" name="profiledescription"/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Preferences</legend>
+            <div>
+                <label for="backgroundimage">Background image</label>
+                <ul>
+                    <li>
+                        <input type="radio" id="backgroundimage" name="backgroundimage" value="1">
+                        <picture>
+                            <source media="(min-width: 800px)" srcset="images/background_1_640.jpg">
+                            <source media="(max-width: 799px)" srcset="images/background_1_320.jpg">
+                            <img src="images/background_1_640.jpg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="backgroundimage" name="backgroundimage" value="2">
+                        <picture>
+                            <source media="(min-width: 800px)" srcset="images/background_2_640.jpg">
+                            <source media="(max-width: 799px)" srcset="images/background_2_320.jpg">
+                            <img src="images/background_2_640.jpg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="backgroundimage" name="backgroundimage" value="3">
+                        <picture>
+                            <source media="(min-width: 800px)" srcset="images/background_3_640.jpg">
+                            <source media="(max-width: 799px)" srcset="images/background_3_320.jpg">
+                            <img src="images/background_3_640.jpg">
+                        </picture>
+                    </li>
+                    <li>
+                        <input type="radio" id="backgroundimage" name="backgroundimage" value="4">
+                        <picture>
+                            <source media="(min-width: 800px)" srcset="images/background_4_640.jpg">
+                            <source media="(max-width: 799px)" srcset="images/background_4_320.jpg">
+                            <img src="images/background_4_640.jpg">
+                        </picture>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset>
+            <input type="submit" value="Save">
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

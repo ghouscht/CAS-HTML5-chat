@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html {
+            font-family: sans-serif;
+            display: flex;
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            flex-direction: column;
+            display: flex;
+            width: 100%;
+        }
+
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            background: lightblue;
+            margin: 0;
+        }
+
+        header h1 {
+            margin-left: 2%;
+            color: white;
+        }
+
+        header nav {
+            flex-basis: 15%;
+            margin-right: 2%;
+        }
+
+        header ul {
+            display: flex;
+            justify-content: space-around;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        header li {
+            display: inline-flex;
+            align-items: center;
+            list-style-type: none;
+        }
+
+        header a {
+            font-weight: bold;
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            background-color: lightgrey;
+        }
+
+        main aside {
+            flex-basis: 25%;
+            align-content: flex-end;
+        }
+
+        main article {
+            flex-basis: 75%;
+            align-items: stretch;
+        }
+
+        form {
+            flex-direction: column;
+            display: flex;
+        }
+
+        div#chat {
+            background: lightskyblue;
+            height: 90%;
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            background: lightblue;
+        }
+    </style>
+
+    <title>Chat</title>
+</head>
+
+<body>
+
+<header>
+    <h1>Chat</h1>
+    <nav>
+        <ul>
+            <li>
+                <a href="chat.html">Chat</a>
+            </li>
+            <li>
+                <a href="about.html">About</a>
+            </li>
+            <li>
+                <a href="profile.html">Profile</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <article>
+        <div id="chat">
+            <section>
+                Blablabla
+            </section>
+            <section>
+                Blabla2
+            </section>
+        </div>
+        <form method="GET">
+            <textarea name="message" id="message"></textarea>
+            <input type="submit" value="Send">
+        </form>
+    </article>
+
+    <aside>
+        <ul>
+            <li>User 1</li>
+            <li>User 2</li>
+            <li>User 3</li>
+            <li>...</li>
+        </ul>
+    </aside>
+</main>
+
+<footer>
+    Server is currently offline...
+</footer>
+
+</body>
+
+</html>

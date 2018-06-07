@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Login</title>
+    <style>
+        html {
+            background-color: lightgrey;
+            font-family: sans-serif;
+        }
+
+        fieldset {
+            margin-right: -50%;
+            left: 50%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            top: 50%;
+            background-color: lightblue;
+            border-style: solid;
+            width: 40%;
+            height: 30%;
+            transform: translate(-50%, -50%);
+            animation: fade-in 3s;
+        }
+
+        fieldset div {
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .text {
+            border: 0;
+            padding: 7px;
+            background: lightslategray;
+            border-radius: 0px;
+        }
+
+        .button {
+            background: transparent;
+            color: lightcoral;
+            border-color: lightcoral;
+            border: 2px solid;
+            border-radius: 20px;
+            padding-top: 2%;
+            padding-bottom: 2%;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .button:hover {
+            background: lightcoral;
+            border-color: lightcoral;
+            color: white;
+        }
+
+        @keyframes fade-in {
+            from {
+                width: 20%;
+                height: 10%;
+                opacity: 0;
+            }
+            to {
+                width: 40%;
+                height: 30%;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <form method="GET" action="chat.html">
+        <fieldset>
+            <div>
+                <p>
+                    <label for="nickname">Nickname</label>
+                    <input data-errMsg="Nickname can't be empty" name="nickname" type="text" class="text" value=""
+                           autofocus="true" required="true" id="nickname" placeholder="Nickname..."/>
+                </p>
+                <input type="submit" class="button" value="Login"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</body>
+
+<script>
+    let nicknameElem = document.getElementById('nickname');
+    nicknameElem.addEventListener('invalid', function (event) {
+        if (this.validity.valueMissing) {
+            this.setCustomValidity(this.getAttribute('data-errMsg'));
+        }
+    });
+    nicknameElem.addEventListener('change',function(event){
+        this.setCustomValidity('');
+    })
+</script>
+</html>
