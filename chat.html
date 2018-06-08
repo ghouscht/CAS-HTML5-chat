@@ -71,17 +71,8 @@
 <main>
     <article>
         <div id="chat">
-            <section>
-                Blabl
-            </section>
-            <section>
-                Blabla2
-            </section>
-            <section>
-                Test
-            </section>
         </div>
-        <form method="GET">
+        <form>
             <textarea name="message" id="message"></textarea>
             <input type="submit" value="Send"/>
         </form>
@@ -93,11 +84,16 @@
         </ul>
     </aside>
 </main>
-<footer>
+<footer id="serverStatus">
     Server is currently offline...
 </footer>
 </body>
 <script>
+    // TODO: poor solution -> if a new user is added after we loaded the page, we do not know about it...
+    // TODO: "race-condition" if the messages request is faster than the user request...
+    let userList = new Map();
+
+
     // read the users which are registered
     let userReq = new XMLHttpRequest();
     userReq.responseType = "json";
@@ -106,19 +102,65 @@
 
     userReq.addEventListener('load', function (e) {
         let users = this.response;
-        let userList = document.getElementById('users');
+        let userListElem = document.getElementById('users');
 
         // append a list item for each user
         for (let i = 0; i < users.length; i++) {
-            let newListElem = document.createElement('li');
+            let user = users[i];
 
-            newListElem.innerHTML = `${users[i].nickname} (${users[i].status})`;
-            userList.appendChild(newListElem);
+            // append each user to our global user list
+            userList.set(user.id, user.nickname);
+
+            let newUserElem = document.createElement('li');
+            newUserElem.innerHTML = `${user.nickname} (${user.status})`;
+            userListElem.appendChild(newUserElem);
         }
     });
 
     userReq.addEventListener('error', function (e) {
         console.Log('ERROR: ' + e);
     });
+
+    let messageReq = new XMLHttpRequest();
+    messageReq.responseType = "json";
+    messageReq.open('GET', 'https://chat.humbapa.ch/api/Messages');
+    messageReq.send();
+
+    messageReq.addEventListener('load', function (e) {
+        let messages = this.response;
+        let chatElem = document.getElementById('chat');
+
+        for (let i = 0; i < messages.length; i++) {
+            let message = messages[i];
+            let newMessageElem = document.createElement('section');
+
+            newMessageElem.innerHTML = `> ${userList.get(message.user_id)}@${timeToLocalDateStr(message.timestamp)} <br /> ${message.message}`;
+            chatElem.appendChild(newMessageElem);
+        }
+    });
+
+    function timeToLocalDateStr(time) {
+        return new Date(time).toLocaleDateString('de-DE', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+        });
+    }
+
+    // TODO: reserved for future use
+    function serverIsOnline() {
+        let footerElem = document.getElementById('serverStatus');
+        footerElem.innerHTML = 'Server is online!';
+        footerElem.style = 'background-color: green;'
+    }
+
+    function serverIsOffline() {
+        let footerElem = document.getElementById('serverStatus');
+        footerElem.innerHTML = 'Server is currently offline...';
+        footerElem.style = 'background-color: lightcoral;';
+    }
 </script>
 </html>
