@@ -5,9 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - Profile</title>
-    <link rel="stylesheet" type="text/css" href="style/main.css" />
+    <link rel="stylesheet" type="text/css" href="style/main.css"/>
     <style>
         fieldset {
+            border-color: white;
             margin: 5px;
         }
 
@@ -26,6 +27,12 @@
 
         li {
             list-style-type: none;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         form label {
@@ -51,7 +58,7 @@
 
 <body>
 <header>
-    <h1>Chat</h1>
+    <h1>Profile</h1>
     <nav>
         <ul>
             <li>
@@ -69,7 +76,7 @@
         </ul>
     </nav>
 </header>
-<div>
+<main>
     <form method="GET">
         <fieldset>
             <legend>Personal details</legend>
@@ -183,9 +190,10 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend>Absenden</legend>
             <input type="submit" value="Save">
         </fieldset>
     </form>
-</div>
+</main>
 </body>
 </html>

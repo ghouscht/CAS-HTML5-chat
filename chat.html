@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css" href="style/main.css"/>
     <style>
-        main {
-            flex: 1;
-            display: flex;
-            background-color: whitesmoke;
-        }
-
         main article {
             display: flex;
             flex-direction: column;
@@ -22,6 +16,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: auto;
         }
 
         main form {
@@ -35,8 +30,11 @@
         }
 
         main section {
-            margin: 5px 0px 0px 10px; /* margin goes clockwise, top -> right -> bottom -> left */
-            display: flex;
+            margin: 5px 10px 5px 10px; /* margin goes clockwise, top -> right -> bottom -> left */
+        }
+
+        main aside {
+            overflow: auto; /* display scrollbar if content overflows the available space */
         }
 
         footer {
@@ -67,7 +65,6 @@
         </ul>
     </nav>
 </header>
-
 <main>
     <article>
         <div id="chat">
@@ -77,7 +74,6 @@
             <input type="submit" value="Send"/>
         </form>
     </article>
-
     <aside>
         <h2>Users</h2>
         <ul id="users">
@@ -105,9 +101,7 @@
         let userListElem = document.getElementById('users');
 
         // append a list item for each user
-        for (let i = 0; i < users.length; i++) {
-            let user = users[i];
-
+        for (let user of users) {
             // append each user to our global user list
             userList.set(user.id, user.nickname);
 
@@ -130,11 +124,10 @@
         let messages = this.response;
         let chatElem = document.getElementById('chat');
 
-        for (let i = 0; i < messages.length; i++) {
-            let message = messages[i];
+        for (let message of messages) {
             let newMessageElem = document.createElement('section');
 
-            newMessageElem.innerHTML = `> ${userList.get(message.user_id)}@${timeToLocalDateStr(message.timestamp)} <br /> ${message.message}`;
+            newMessageElem.innerHTML = `> ${userList.get(message.user_id)}@${timeToLocalDateStr(message.timestamp)} <br /> ${message.message} <br /><hr />`;
             chatElem.appendChild(newMessageElem);
         }
     });
