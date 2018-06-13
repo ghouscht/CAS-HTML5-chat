@@ -6,30 +6,42 @@
     <title>Chat - Login</title>
     <style>
         html {
-            background-color: lightgrey;
+            background-color: whitesmoke;
             font-family: sans-serif;
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
 
-        fieldset {
-            margin-right: -50%;
-            left: 50%;
-            position: absolute;
+        body {
+            width: 100%;
+            height: 100%;
             display: flex;
+            justify-content: center;
             align-items: center;
-            top: 50%;
+        }
+
+        div {
             background-color: lightblue;
-            border-style: solid;
             width: 40%;
             height: 30%;
-            transform: translate(-50%, -50%);
+            text-align: center;
             animation: fade-in 3s;
         }
 
-        fieldset div {
-            text-align: center;
-            display: block;
-            margin-left: auto;
-            margin-right: auto
+        form {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        fieldset {
+            border-style: none;
+            padding: 0px;
+            margin: 0px;
         }
 
         .text {
@@ -42,13 +54,9 @@
         .button {
             background: transparent;
             color: lightcoral;
-            border-color: lightcoral;
-            border: 2px solid;
+            border: 2px solid lightcoral;
             border-radius: 20px;
-            padding-top: 2%;
-            padding-bottom: 2%;
-            padding-left: 5%;
-            padding-right: 5%;
+            padding: 2% 5% 2% 5%;
         }
 
         .button:hover {
@@ -75,14 +83,12 @@
 <div>
     <form method="GET" action="chat.html" id="login">
         <fieldset>
-            <div>
-                <p>
-                    <label for="nickname">Nickname</label>
-                    <input data-errMsg="Nickname can't be empty" name="nickname" type="text" class="text" value=""
-                           autofocus="true" required="true" id="nickname" placeholder="Nickname..."/>
-                </p>
-                <input type="submit" class="button" value="Login"/>
-            </div>
+            <p>
+                <label for="nickname">Nickname</label>
+                <input data-errMsg="Nickname can't be empty" name="nickname" type="text" class="text" value=""
+                       autofocus="true" required="true" id="nickname" placeholder="Nickname..."/>
+            </p>
+            <input type="submit" class="button" value="Login"/>
         </fieldset>
     </form>
 </div>
