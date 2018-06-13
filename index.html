@@ -87,27 +87,37 @@
     </form>
 </div>
 </body>
-
+<script src="app/user.js"></script>
 <script>
+    // custom error message & form validation
     let nicknameElem = document.getElementById('nickname');
-    let loginForm = document.getElementById('login');
-    let usernameKey = 'username';
-
-    window.onload = function () {
-        nicknameElem.value = localStorage.getItem(usernameKey)
-    };
-
     nicknameElem.addEventListener('invalid', function (event) {
         if (this.validity.valueMissing) {
             this.setCustomValidity(this.getAttribute('data-errMsg'));
         }
     });
+
     nicknameElem.addEventListener('change', function (event) {
         this.setCustomValidity('');
     });
 
+    let loginForm = document.getElementById('login');
+
+    // create a user instance and load info from storage if available
+    let myUser = new user.User();
+    myUser.loadLocal();
+
+    window.onload = function () {
+        nicknameElem.value = myUser.nickname;
+    };
+
+
     loginForm.addEventListener('submit', function (event) {
-        localStorage.setItem(usernameKey, nicknameElem.value)
+        event.preventDefault(); // do not redirect!
+
+        // set the users nickname
+        myUser.nickname = nicknameElem.value;
+        myUser.fetchID();
     });
 </script>
 </html>

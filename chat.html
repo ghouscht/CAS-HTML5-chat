@@ -84,6 +84,7 @@
     Server is currently offline...
 </footer>
 </body>
+
 <script>
     // TODO: poor solution -> if a new user is added after we loaded the page, we do not know about it...
     // TODO: "race-condition" if the messages request is faster than the user request...
@@ -106,6 +107,7 @@
             userList.set(user.id, user.nickname);
 
             let newUserElem = document.createElement('li');
+            newUserElem.draggable = true; // make the li element draggable
             newUserElem.innerHTML = `${user.nickname} (${user.status})`;
             userListElem.appendChild(newUserElem);
         }
@@ -156,4 +158,5 @@
         footerElem.style = 'background-color: lightcoral;';
     }
 </script>
+<script type="text/javascript" src="app/draganddrop.js"/>
 </html>
