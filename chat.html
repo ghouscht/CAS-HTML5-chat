@@ -19,6 +19,12 @@
             overflow: auto;
         }
 
+        div#chat p {
+            color: grey;
+            padding: 0px 0px 10px 5px;
+            margin: 0px;
+        }
+
         main form {
             display: flex;
             min-height: 15%;
@@ -35,6 +41,34 @@
 
         main aside {
             overflow: auto; /* display scrollbar if content overflows the available space */
+            display: flex;
+            flex: 2;
+            flex-direction: column;
+            padding: 5px 25px 5px 25px;
+        }
+
+        aside ul {
+            padding: 0px;
+            margin: 0px;
+            list-style-type: none;
+        }
+
+        aside li {
+            margin: 5px 0px 5px 0px;
+            border: 5px solid white;
+            padding: 5px 5px 5px 10px;
+        }
+
+        .online {
+            color: green;
+        }
+
+        .away {
+            color: orange;
+        }
+
+        .offline {
+            color: red;
         }
 
         footer {
@@ -89,6 +123,7 @@
 <script>
     // DOM elements
     let chatElem = document.getElementById('chat');
+    let userListElem = document.getElementById('users');
     let chatForm = document.getElementById('chatMessage');
 
     let myUser = new user.User();
@@ -98,23 +133,26 @@
     // helper which inserts a new chat message into the DOM
     function insertMessage(msg) {
         let newMessageElem = document.createElement('section');
-        newMessageElem.innerHTML = `> ${userMap.get(msg.user_id)}@${msg.timestamp} <br /> ${msg.message} <br /><hr />`;
+        newMessageElem.innerHTML = `<p>${userMap.get(msg.user_id)}@${msg.timestamp}</p>${msg.message} <br /><hr />`;
         chatElem.appendChild(newMessageElem);
         chatElem.scrollTop = chatElem.scrollHeight;
     }
 
+    // helper which inserts a new user into the DOM
+    function insertUser(user) {
+        userMap.set(user.id, user.nickname);
+
+        let newUserElem = document.createElement('li');
+        newUserElem.draggable = true; // make the li element draggable
+        newUserElem.className = user.status;
+        newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" style="vertical-align: middle;" width="15%"/> ${user.nickname}`;
+        userListElem.appendChild(newUserElem);
+    }
+
     // load all Users from the server, and create the user List
     myUser.getAllUsers().then(users => {
-        let userListElem = document.getElementById('users');
-
-        // append a list item for each user
         for (let user of users) {
-            userMap.set(user.id, user.nickname);
-
-            let newUserElem = document.createElement('li');
-            newUserElem.draggable = true; // make the li element draggable
-            newUserElem.innerHTML = `${user.nickname} (${user.status})`;
-            userListElem.appendChild(newUserElem);
+            insertUser(user)
         }
     }).catch(err => {
         alert(`Fehler beim laden der User: ${err}`)
@@ -132,35 +170,35 @@
     // Websocket stuff
     myChat.webSocket.onmessage = function (event) {
         let wsEvent = JSON.parse(event.data);
+        // new message
         if (wsEvent.action === 'message_added') {
             insertMessage(wsEvent.data);
+            myChat.notify('Neue Nachricht', wsEvent.data.message);
+        } else if (wsEvent.action === 'user_added') {
+            insertUser(wsEvent.data);
+            myChat.notify('Neuer User', `${wsEvent.data.nickname} hat sich gerade angemeldet`)
         }
+    };
+    myChat.webSocket.onopen = function (event) {
+        let footerElem = document.getElementById('serverStatus');
+        footerElem.innerHTML = 'Server is online!';
+        footerElem.style = 'background-color: green;'
+    };
+    myChat.webSocket.onerror = function (event) {
+        let footerElem = document.getElementById('serverStatus');
+        footerElem.innerHTML = 'Server is currently offline...';
+        footerElem.style = 'background-color: lightcoral;'
     };
 
     // submit a new message
     chatForm.addEventListener('submit', function (event) {
         event.preventDefault();
         let messageElem = document.getElementById('message');
-        myChat.sendMessage(messageElem.value).then(resp =>{
+        myChat.sendMessage(messageElem.value).then(resp => {
             messageElem.value = "";
         }).catch(err => {
             alert(`Fehler beim senden der Nachricht: ${err}`)
         });
     });
-
-
-    /*
-    function serverIsOnline() {
-        let footerElem = document.getElementById('serverStatus');
-        footerElem.innerHTML = 'Server is online!';
-        footerElem.style = 'background-color: green;'
-    }
-
-    function serverIsOffline() {
-        let footerElem = document.getElementById('serverStatus');
-        footerElem.innerHTML = 'Server is currently offline...';
-        footerElem.style = 'background-color: lightcoral;';
-    }
-    */
 </script>
 </html>

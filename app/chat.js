@@ -8,6 +8,20 @@ var chat = (function () {
             this.webSocket = new WebSocket(wsURL);
         }
 
+        notify(title, message) {
+            // send notification only if we have permission
+            // and if the document is currently hidden
+            if (Notification.permission === 'default') {
+                Notification.requestPermission();
+            } else if (Notification.permission === 'granted') {
+                if (document.hidden) {
+                    new Notification(title, {
+                        body: message,
+                    })
+                }
+            }
+        }
+
         loadMessages() {
             return fetch(chatAPI, {
                 method: 'GET',
