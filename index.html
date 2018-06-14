@@ -6,7 +6,7 @@
     <title>Chat - Login</title>
     <style>
         html {
-            background-color: whitesmoke;
+            background-color: lightgrey;
             font-family: sans-serif;
             display: flex;
             overflow: hidden;
@@ -81,7 +81,7 @@
 </head>
 <body>
 <div>
-    <form method="GET" action="chat.html" id="login">
+    <form action="chat.html" id="login">
         <fieldset>
             <p>
                 <label for="nickname">Nickname</label>
@@ -111,19 +111,16 @@
 
     // create a user instance and load info from storage if available
     let myUser = new user.User();
-    myUser.loadLocal();
 
     window.onload = function () {
         nicknameElem.value = myUser.nickname;
     };
 
-
     loginForm.addEventListener('submit', function (event) {
         event.preventDefault(); // do not redirect!
-
         // set the users nickname
         myUser.nickname = nicknameElem.value;
-        myUser.fetchID();
+        myUser.createUser(this);
     });
 </script>
 </html>

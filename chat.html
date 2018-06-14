@@ -69,7 +69,7 @@
     <article>
         <div id="chat">
         </div>
-        <form>
+        <form id="chatMessage">
             <textarea name="message" id="message"></textarea>
             <input type="submit" value="Send"/>
         </form>
@@ -84,68 +84,72 @@
     Server is currently offline...
 </footer>
 </body>
-
+<script src="app/user.js"></script>
+<script src="app/chat.js"></script>
 <script>
-    // TODO: poor solution -> if a new user is added after we loaded the page, we do not know about it...
-    // TODO: "race-condition" if the messages request is faster than the user request...
-    let userList = new Map();
+    // DOM elements
+    let chatElem = document.getElementById('chat');
+    let chatForm = document.getElementById('chatMessage');
 
+    let myUser = new user.User();
+    let myChat = new chat.Chat(myUser, chatElem);
+    let userMap = new Map();
 
-    // read the users which are registered
-    let userReq = new XMLHttpRequest();
-    userReq.responseType = "json";
-    userReq.open('GET', 'https://chat.humbapa.ch/api/Users');
-    userReq.send();
+    // helper which inserts a new chat message into the DOM
+    function insertMessage(msg) {
+        let newMessageElem = document.createElement('section');
+        newMessageElem.innerHTML = `> ${userMap.get(msg.user_id)}@${msg.timestamp} <br /> ${msg.message} <br /><hr />`;
+        chatElem.appendChild(newMessageElem);
+        chatElem.scrollTop = chatElem.scrollHeight;
+    }
 
-    userReq.addEventListener('load', function (e) {
-        let users = this.response;
+    // load all Users from the server, and create the user List
+    myUser.getAllUsers().then(users => {
         let userListElem = document.getElementById('users');
 
         // append a list item for each user
         for (let user of users) {
-            // append each user to our global user list
-            userList.set(user.id, user.nickname);
+            userMap.set(user.id, user.nickname);
 
             let newUserElem = document.createElement('li');
             newUserElem.draggable = true; // make the li element draggable
             newUserElem.innerHTML = `${user.nickname} (${user.status})`;
             userListElem.appendChild(newUserElem);
         }
+    }).catch(err => {
+        alert(`Fehler beim laden der User: ${err}`)
     });
 
-    userReq.addEventListener('error', function (e) {
-        console.Log('ERROR: ' + e);
-    });
-
-    let messageReq = new XMLHttpRequest();
-    messageReq.responseType = "json";
-    messageReq.open('GET', 'https://chat.humbapa.ch/api/Messages');
-    messageReq.send();
-
-    messageReq.addEventListener('load', function (e) {
-        let messages = this.response;
-        let chatElem = document.getElementById('chat');
-
-        for (let message of messages) {
-            let newMessageElem = document.createElement('section');
-
-            newMessageElem.innerHTML = `> ${userList.get(message.user_id)}@${timeToLocalDateStr(message.timestamp)} <br /> ${message.message} <br /><hr />`;
-            chatElem.appendChild(newMessageElem);
+    // load all the Messages
+    myChat.loadMessages().then(messages => {
+        for (let msg of messages.reverse()) {
+            insertMessage(msg);
         }
+    }).catch(err => {
+        alert(`Fehler beim laden der Nachrichten ${err}`)
     });
 
-    function timeToLocalDateStr(time) {
-        return new Date(time).toLocaleDateString('de-DE', {
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
-        });
-    }
+    // Websocket stuff
+    myChat.webSocket.onmessage = function (event) {
+        let wsEvent = JSON.parse(event.data);
+        if (wsEvent.action === 'message_added') {
+            insertMessage(wsEvent.data);
+        }
+    };
 
-    // TODO: reserved for future use
+    // submit a new message
+    chatForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let messageElem = document.getElementById('message');
+        myChat.sendMessage(messageElem.value).then(resp =>{
+            messageElem.value = "";
+        }).catch(err => {
+            alert(`Fehler beim senden der Nachricht: ${err}`)
+        });
+    });
+
+
+    /*
     function serverIsOnline() {
         let footerElem = document.getElementById('serverStatus');
         footerElem.innerHTML = 'Server is online!';
@@ -157,6 +161,6 @@
         footerElem.innerHTML = 'Server is currently offline...';
         footerElem.style = 'background-color: lightcoral;';
     }
+    */
 </script>
-<script type="text/javascript" src="app/draganddrop.js"/>
 </html>
