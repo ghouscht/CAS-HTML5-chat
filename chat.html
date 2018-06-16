@@ -55,20 +55,19 @@
 
         aside li {
             margin: 5px 0px 5px 0px;
-            border: 5px solid white;
             padding: 5px 5px 5px 10px;
         }
 
         .online {
-            color: green;
+            border: 5px solid lightgreen;
         }
 
         .away {
-            color: orange;
+            border: 5px solid lightsalmon;
         }
 
         .offline {
-            color: red;
+            border: 5px solid lightcoral;
         }
 
         footer {
@@ -141,11 +140,18 @@
     // helper which inserts a new user into the DOM
     function insertUser(user) {
         userMap.set(user.id, user.nickname);
-
         let newUserElem = document.createElement('li');
+
         newUserElem.draggable = true; // make the li element draggable
+        newUserElem.id = user.id;
         newUserElem.className = user.status;
-        newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" style="vertical-align: middle;" width="15%"/> ${user.nickname}`;
+        newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" draggable="false" width="15%"/> ${user.nickname}`;
+
+        // drag & drop listeners
+        newUserElem.addEventListener('dragstart', handleDragStart, false);
+        newUserElem.addEventListener('dragover', handleDragOver, false);
+        newUserElem.addEventListener('drop', handleDrop, false);
+
         userListElem.appendChild(newUserElem);
     }
 
@@ -177,6 +183,16 @@
         } else if (wsEvent.action === 'user_added') {
             insertUser(wsEvent.data);
             myChat.notify('Neuer User', `${wsEvent.data.nickname} hat sich gerade angemeldet`)
+        } else if (wsEvent.action === 'user_updated') {
+            let userElem = document.getElementById(wsEvent.data.id);
+            if (userElem !== undefined) {
+                userElem.className = wsEvent.data.status;
+            }
+        } else if (wsEvent.action === 'user_deleted') {
+            let userElem = document.getElementById(wsEvent.data.id);
+            if (userElem !== undefined) {
+                userElem.remove();
+            }
         }
     };
     myChat.webSocket.onopen = function (event) {
@@ -200,5 +216,28 @@
             alert(`Fehler beim senden der Nachricht: ${err}`)
         });
     });
+
+    // drag & drop
+    var dragSrcElem = null;
+
+    function handleDragStart(e) {
+        dragSrcElem = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // TODO fix, does not copy attrs
+        dragSrcElem.innerHTML = e.target.innerHTML;
+        e.target.innerHTML = e.dataTransfer.getData("text/html");
+    }
 </script>
 </html>
