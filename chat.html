@@ -219,25 +219,20 @@
 
     // drag & drop
     var dragSrcElem = null;
-
     function handleDragStart(e) {
         dragSrcElem = this;
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.style.opacity = '0.4';
     }
-
     function handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = "move";
     }
-
     function handleDrop(e) {
         e.preventDefault();
         e.stopPropagation();
-
-        // TODO fix, does not copy attrs
-        dragSrcElem.innerHTML = e.target.innerHTML;
-        e.target.innerHTML = e.dataTransfer.getData("text/html");
+        userListElem.insertBefore(dragSrcElem,e.target);
+        dragSrcElem.style.opacity = '1';
     }
 </script>
 </html>
