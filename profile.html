@@ -115,28 +115,28 @@
                 <label for="profilepicture1">Picture</label>
                 <ul class="avatar">
                     <li>
-                        <input type="radio" id="profilepicture1" name="profilepicture" value="1" required="true"/>
+                        <input type="radio" id="profilepicture1" value="profilepicture1" name="profilepicture" required="true"/>
                         <picture>
                             <source srcset="images/avatar_icon_1.svg">
                             <img src="images/avatar_icon_1.svg">
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="profilepicture2" name="profilepicture" value="2">
+                        <input type="radio" id="profilepicture2" value="profilepicture2" name="profilepicture">
                         <picture>
                             <source srcset="images/avatar_icon_2.svg">
                             <img src="images/avatar_icon_2.svg">
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="profilepicture3" name="profilepicture" value="3">
+                        <input type="radio" id="profilepicture3" value="profilepicture3" name="profilepicture">
                         <picture>
                             <source srcset="images/avatar_icon_3.svg">
                             <img src="images/avatar_icon_3.svg">
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="profilepicture4" name="profilepicture" value="4">
+                        <input type="radio" id="profilepicture4" value="profilepicture4" name="profilepicture">
                         <picture>
                             <source srcset="images/avatar_icon_4.svg">
                             <img src="images/avatar_icon_4.svg">
@@ -152,10 +152,10 @@
         <fieldset>
             <legend>Preferences</legend>
             <div>
-                <label for="backgroundimage">Background image</label>
+                <label for="backgroundimage1">Background image</label>
                 <ul>
                     <li>
-                        <input type="radio" id="backgroundimage" name="backgroundimage" value="1">
+                        <input type="radio" id="backgroundimage1" name="backgroundimage" value="backgroundimage1">
                         <picture>
                             <source media="(min-width: 800px)" srcset="images/background_1_640.jpg">
                             <source media="(max-width: 799px)" srcset="images/background_1_320.jpg">
@@ -163,7 +163,7 @@
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="backgroundimage" name="backgroundimage" value="2">
+                        <input type="radio" id="backgroundimage2" name="backgroundimage" value="backgroundimage2">
                         <picture>
                             <source media="(min-width: 800px)" srcset="images/background_2_640.jpg">
                             <source media="(max-width: 799px)" srcset="images/background_2_320.jpg">
@@ -171,7 +171,7 @@
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="backgroundimage" name="backgroundimage" value="3">
+                        <input type="radio" id="backgroundimage3" name="backgroundimage" value="backgroundimage3">
                         <picture>
                             <source media="(min-width: 800px)" srcset="images/background_3_640.jpg">
                             <source media="(max-width: 799px)" srcset="images/background_3_320.jpg">
@@ -179,7 +179,7 @@
                         </picture>
                     </li>
                     <li>
-                        <input type="radio" id="backgroundimage" name="backgroundimage" value="4">
+                        <input type="radio" id="backgroundimage4" name="backgroundimage" value="backgroundimage4">
                         <picture>
                             <source media="(min-width: 800px)" srcset="images/background_4_640.jpg">
                             <source media="(max-width: 799px)" srcset="images/background_4_320.jpg">
@@ -206,7 +206,11 @@
             let data = JSON.parse(storageData);
 
             Object.keys(data).forEach(function (key) {
-                document.getElementById(key).value = data[key];
+                if (key === 'backgroundimage' || key === 'profilepicture') {
+                    document.getElementById(data[key]).checked = true;
+                } else {
+                    document.getElementById(key).value = data[key];
+                }
             });
         }
     };
