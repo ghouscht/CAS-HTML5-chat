@@ -170,7 +170,7 @@
         newUserElem.draggable = true; // make the li element draggable
         newUserElem.id = user.id;
         newUserElem.className = user.status;
-        newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" draggable="false" width="15%"/> ${user.nickname}`;
+        newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" draggable="false" width="8%"/> ${user.nickname}`;
 
         // drag & drop listeners
         addDragDropHandlers(newUserElem);
@@ -184,15 +184,15 @@
         }
     }).catch(err => {
         alert(`Fehler beim laden der User: ${err}`)
-    });
-
-    // load all the Messages
-    myChat.loadMessages().then(messages => {
-        for (let msg of messages.reverse()) {
-            insertMessage(msg);
-        }
-    }).catch(err => {
-        alert(`Fehler beim laden der Nachrichten ${err}`)
+    }).then(() => {
+        // load all the Messages
+        myChat.loadMessages().then(messages => {
+            for (let msg of messages.reverse()) {
+                insertMessage(msg);
+            }
+        }).catch(err => {
+            alert(`Fehler beim laden der Nachrichten ${err}`)
+        });
     });
 
     // Websocket stuff
