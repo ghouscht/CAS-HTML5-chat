@@ -20,12 +20,6 @@ header {
     background: lightgrey;
 }
 
-@media screen and (max-width: 800px) {
-    header {
-        flex-direction: column;
-    }
-}
-
 header h1 {
     margin-left: 2%;
     color: white;
@@ -68,4 +62,27 @@ main {
     display: flex;
     background-color: whitesmoke;
     overflow: auto;
+}
+
+@media screen and (max-width: 800px) {
+    header {
+        flex-direction: column;
+    }
+    header h1 {
+        margin-bottom: 0px;
+    }
+
+    header ul {
+        padding: 0px;
+        display: inline-flex;
+    }
+
+    header li {
+        float: none;
+    }
+
+    header nav {
+        margin: 0px 0px 0px 0px;
+        text-align: center;
+    }
 }

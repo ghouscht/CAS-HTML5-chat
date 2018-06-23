@@ -58,6 +58,10 @@
             padding: 5px 5px 5px 10px;
         }
 
+        li.over {
+            border-top: 5px solid lightskyblue;
+        }
+
         .online {
             border: 5px solid lightgreen;
         }
@@ -132,9 +136,30 @@
     // helper which inserts a new chat message into the DOM
     function insertMessage(msg) {
         let newMessageElem = document.createElement('section');
-        newMessageElem.innerHTML = `<p>${userMap.get(msg.user_id)}@${msg.timestamp}</p>${msg.message} <br /><hr />`;
+        newMessageElem.innerHTML = `<p>${userMap.get(msg.user_id)}@${formatTimestamp(msg.timestamp)}</p>${msg.message} <br /><hr />`;
         chatElem.appendChild(newMessageElem);
         chatElem.scrollTop = chatElem.scrollHeight;
+    }
+
+    function formatTimestamp(time) {
+        let ts = new Date(time);
+        let format = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        };
+        return ts.toLocaleDateString('de-CH', format);
+    }
+
+    function addDragDropHandlers(elem) {
+        elem.addEventListener('dragstart', handleDragStart, false);
+        elem.addEventListener('dragover', handleDragOver, false);
+        elem.addEventListener('drop', handleDrop, false);
+        elem.addEventListener('dragleave', handleDragLeave, false);
+        elem.addEventListener('dragend', handleDragFinish, false);
     }
 
     // helper which inserts a new user into the DOM
@@ -148,10 +173,7 @@
         newUserElem.innerHTML = `<img src="images/avatar_icon_${user.avatar}.svg" draggable="false" width="15%"/> ${user.nickname}`;
 
         // drag & drop listeners
-        newUserElem.addEventListener('dragstart', handleDragStart, false);
-        newUserElem.addEventListener('dragover', handleDragOver, false);
-        newUserElem.addEventListener('drop', handleDrop, false);
-
+        addDragDropHandlers(newUserElem);
         userListElem.appendChild(newUserElem);
     }
 
@@ -219,20 +241,40 @@
 
     // drag & drop
     var dragSrcElem = null;
+
     function handleDragStart(e) {
         dragSrcElem = this;
         e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.outerHTML);
         this.style.opacity = '0.4';
     }
+
     function handleDragOver(e) {
         e.preventDefault();
+        this.classList.add('over');
         e.dataTransfer.dropEffect = "move";
     }
+
     function handleDrop(e) {
-        e.preventDefault();
         e.stopPropagation();
-        userListElem.insertBefore(dragSrcElem,e.target);
-        dragSrcElem.style.opacity = '1';
+        if (dragSrcElem != this) {
+            this.parentNode.removeChild(dragSrcElem);
+            let drop = e.dataTransfer.getData('text/html');
+            this.insertAdjacentHTML('beforebegin', drop);
+            addDragDropHandlers(this.previousSibling)
+        }
+        this.classList.remove('over');
+        this.style.opacity = '1';
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('over');
+        this.style.opacity = '1';
+    }
+
+    function handleDragFinish(e) {
+        this.classList.remove('over')
+        this.style.opacity = '1';
     }
 </script>
 </html>
